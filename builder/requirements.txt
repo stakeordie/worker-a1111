@@ -42,6 +42,7 @@ piexif==1.1.3
 psutil==5.9.5
 resize-right==0.0.2
 tomesd==0.1.3
+httpx==0.24.1
 
 # Direct Git Dependencies
 # These dependencies are directly cloned from GitHub. Ensure the specified commits/tags are compatible.
