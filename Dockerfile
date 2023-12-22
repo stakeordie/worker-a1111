@@ -27,7 +27,7 @@ RUN apk add --no-cache wget && \
 # ---------------------------------------------------------------------------- #
 #                        Stage 3: Build the final image                        #
 # ---------------------------------------------------------------------------- #
-FROM python:3.10.9-slim as build_final_image
+FROM python:3.10.6-slim as build_final_image
 
 ARG SHA=5ef669de080814067961f28357256e8fe27544f4
 
