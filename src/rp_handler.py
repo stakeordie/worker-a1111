@@ -30,19 +30,20 @@ def wait_for_service(url):
         time.sleep(0.2)
 
 
-def run_inference(inference_request, type = "text2img"):
+def run_inference(inference_request):
     '''
     Run inference on a request.
     '''
-    if(type == "img2img"):
+
+    if(inference_request['type'] == "img2img"):
         response = automatic_session.post(url=f'{LOCAL_URL}/img2img',
-                                      json=inference_request, timeout=600)
-    elif(type == "extra-single-image"):
+                                      json=inference_request['prompt'], timeout=600)
+    elif(inference_request['type'] == "extra-single-image"):
         response = automatic_session.post(url=f'{LOCAL_URL}/extra-single-image',
-                                      json=inference_request, timeout=600)
+                                      json=inference_request['prompt'], timeout=600)
     else:
         response = automatic_session.post(url=f'{LOCAL_URL}/txt2img',
-                                      json=inference_request, timeout=600)
+                                      json=inference_request['prompt'], timeout=600)
 
     return response.json()
 
