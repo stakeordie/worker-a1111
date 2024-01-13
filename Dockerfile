@@ -21,7 +21,7 @@ RUN . /clone.sh BLIP https://github.com/salesforce/BLIP.git 48211a1594f1321b00f1
     . /clone.sh generative-models https://github.com/Stability-AI/generative-models 45c443b316737a4ab6e40413d7794a7f5657c19f
 
 RUN apk add --no-cache wget && \
-    wget -q -O /model.safetensors https://civitai.com/models/120964?modelVersionId=131579
+    wget -q -O /model.safetensors models/rundiffusion_xl
 
 
 # ---------------------------------------------------------------------------- #
