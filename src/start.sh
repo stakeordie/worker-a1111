@@ -2,7 +2,7 @@
 
 echo "Worker Initiated"
 
-echo ls -la /runpod-volume
+ls -la /
 
 echo "Starting WebUI API"
 python /stable-diffusion-webui/webui.py --skip-python-version-check --skip-torch-cuda-test --skip-install --ckpt /model.ckpt --lora-dir /runpod-volume/lora --lowram --opt-sdp-no-mem-attention --disable-safe-unpickle --port 3000 --api --nowebui --skip-version-check  --no-hashing --no-download-sd-model &
