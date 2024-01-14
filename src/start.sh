@@ -4,7 +4,7 @@ echo "Worker Initiated"
 
 echo ls -la /
 
-while getopts "m:" flag > /dev/null 2>&1
+while getopts ":m" flag > /dev/null 2>&1
 do
     case ${flag} in
         m) model="${OPTARG}" ;;
