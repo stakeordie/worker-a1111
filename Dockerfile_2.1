@@ -27,6 +27,7 @@ ARG model
 ENV MODEL=${model}
 COPY models/${model} /${model}
 
+RUN echo "model = $model ${model}"
 #MODEL = $MODEL
 
 # ---------------------------------------------------------------------------- #
