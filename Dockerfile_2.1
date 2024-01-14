@@ -25,7 +25,7 @@ RUN apk add --no-cache wget
 #COPY models/v2-1_768-ema-pruned.ckpt /model.ckpt
 ARG model
 ENV MODEL=${model}
-COPY models/${MODEL} /${MODEL}
+COPY models/${model} /${model}
 
 #MODEL = $MODEL
 
@@ -62,8 +62,8 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 #&& \ pip install -r requirements_versions.txt
 
 COPY --from=download /repositories/ ${ROOT}/repositories/
-#ARG model
-COPY --from=download /${MODEL} /${MODEL}
+ARG model
+COPY --from=download /${model} /${model}
 RUN mkdir ${ROOT}/interrogate && cp ${ROOT}/repositories/clip-interrogator/data/* ${ROOT}/interrogate
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install -r ${ROOT}/repositories/CodeFormer/requirements.txt
@@ -78,7 +78,8 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 ADD src .
 
 COPY builder/cache.py /stable-diffusion-webui/cache.py
-RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /${MODEL}
+ARG model
+RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /${model}
 
 # Cleanup section (Worker Template)
 RUN apt-get autoremove -y && \
