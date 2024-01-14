@@ -25,6 +25,9 @@ RUN apk add --no-cache wget
 #COPY models/v2-1_768-ema-pruned.ckpt /model.ckpt
 ARG model
 COPY models/${model} /${model}
+ENV MODEL=${model}
+
+#MODEL = $MODEL
 
 # ---------------------------------------------------------------------------- #
 #                        Stage 3: Build the final image                        #
@@ -86,4 +89,4 @@ RUN apt-get autoremove -y && \
 # Set permissions and specify the command to run
 RUN chmod +x /start.sh
 ARG model
-CMD /start.sh -m ${model}
+CMD /start.sh
