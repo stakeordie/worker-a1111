@@ -24,7 +24,7 @@ RUN apk add --no-cache wget
 
 #COPY models/v2-1_768-ema-pruned.ckpt /model.ckpt
 ARG model
-COPY models/${model} /${model}
+#COPY models/${model} /${model}
 
 # ---------------------------------------------------------------------------- #
 #                        Stage 3: Build the final image                        #
@@ -59,7 +59,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 #&& \ pip install -r requirements_versions.txt
 
 COPY --from=download /repositories/ ${ROOT}/repositories/
-COPY --from=download /${model} /${model}
+COPY --from=download /models/${model} /${model}
 RUN mkdir ${ROOT}/interrogate && cp ${ROOT}/repositories/clip-interrogator/data/* ${ROOT}/interrogate
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install -r ${ROOT}/repositories/CodeFormer/requirements.txt
