@@ -82,7 +82,7 @@ ADD src .
 
 COPY builder/cache.py /stable-diffusion-webui/cache.py
 ARG model
-RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /${model}
+RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /${model} --no-half --no-half-vae
 
 # Cleanup section (Worker Template)
 RUN apt-get autoremove -y && \
