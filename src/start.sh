@@ -3,7 +3,7 @@
 echo "Worker Initiated"
 
 ls -la /stable-diffusion-webui
-ls -la /
+ls -la /stable-diffusion-webui/models
 
 echo $MODEL
 
