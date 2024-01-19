@@ -26,8 +26,6 @@ RUN apk add --no-cache wget
 ARG model
 COPY models/${model} /${model}
 
-RUN apt-get instal git-lfs && git lfs install && git clone https://github.com/stakeordie/sd_models.git
-
 RUN echo "model = $model ${model}"
 #MODEL = $MODEL
 
