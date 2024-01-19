@@ -26,6 +26,8 @@ RUN apk add --no-cache wget
 ARG model
 COPY models/${model} /${model}
 
+RUN apt-get instal git-lfs && git lfs install && git clone https://github.com/stakeordie/sd_models.git
+
 RUN echo "model = $model ${model}"
 #MODEL = $MODEL
 
@@ -50,15 +52,20 @@ RUN export TORCH_COMMAND='pip install --pre torch torchvision torchaudio --extra
 
 RUN apt-get update && \
     apt install -y \
-    fonts-dejavu-core rsync git jq moreutils aria2 wget libgoogle-perftools-dev procps libgl1 libglib2.0-0 && \
-    apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && apt-get clean -y
+    fonts-dejavu-core rsync git jq moreutils aria2 wget libgoogle-perftools-dev procps libgl1 libglib2.0-0 && apt-get install git-lfs && \
+    apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && apt-get clean -y && install git-lfs
 
 RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \
     pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
 RUN --mount=type=cache,target=/root/.cache/pip \
-    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
-    cd stable-diffusion-webui
+    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
+
+RUN --mount=type=cache,target=/root/.cache/pip \
+    git clone https://github.com/stakeordie/sd_upscaler_additions.git
+
+RUN cp -a /sd_upscaler_additions/. /stable-diffusion-webui/models/
+
     # && \ git reset --hard ${SHA}
 #&& \ pip install -r requirements_versions.txt
 
