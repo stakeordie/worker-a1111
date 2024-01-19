@@ -62,7 +62,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/stakeordie/sd_upscaler_additions.git
 
-RUN cp -a /sd_upscaler_additions/. /stable-diffusion-webui/models/
+##RUN cp -a /sd_upscaler_additions/. /stable-diffusion-webui/models/
 
     # && \ git reset --hard ${SHA}
 #&& \ pip install -r requirements_versions.txt
