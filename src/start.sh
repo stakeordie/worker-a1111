@@ -2,6 +2,7 @@
 
 echo "Worker Initiated"
 
+ls -la /stable-diffusion-webui
 ls -la /
 
 echo $MODEL
