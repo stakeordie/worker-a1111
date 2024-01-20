@@ -25,6 +25,7 @@ RUN apk add --no-cache wget
 #COPY models/v2-1_768-ema-pruned.ckpt /model.ckpt
 ARG model
 COPY models/${model} /${model}
+COPY upscalers /upscalers
 
 RUN echo "model = $model ${model}"
 #MODEL = $MODEL
@@ -53,17 +54,13 @@ RUN apt-get update && \
     fonts-dejavu-core rsync git jq moreutils aria2 wget libgoogle-perftools-dev procps libgl1 libglib2.0-0 && \
     apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && apt-get clean -y
 
-RUN curl -O https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh && bash script.deb.sh && \
-    apt-get install git-lfs -y && \
-    git lfs install
 
 RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \
     pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
 RUN --mount=type=cache,target=/root/.cache/pip \
-    git lfs clone https://github.com/stakeordie/sd_upscaler_additions.git && \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
-    cp -a /sd_upscaler_additions/. ${ROOT}/models/
+    cp -a /upscalers/. ${ROOT}/models/
     #cd stable-diffusion-webui
     # && \ git reset --hard ${SHA}
 #&& \ pip install -r requirements_versions.txt
