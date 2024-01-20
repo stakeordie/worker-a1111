@@ -58,6 +58,7 @@ RUN apt-get update && \
 RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \
     pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
+COPY --from=download /upscalers /upscalers
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
     cp -a /upscalers/. ${ROOT}/models/
@@ -68,7 +69,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 COPY --from=download /repositories/ ${ROOT}/repositories/
 ARG model
 COPY --from=download /${model} /${model}
-COPY --from=download /upscalers /upscalers
+
 RUN mkdir ${ROOT}/interrogate && cp ${ROOT}/repositories/clip-interrogator/data/* ${ROOT}/interrogate
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install -r ${ROOT}/repositories/CodeFormer/requirements.txt
