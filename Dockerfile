@@ -60,7 +60,7 @@ RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip 
     pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
 RUN --mount=type=cache,target=/root/.cache/pip \
-    git clone https://github.com/stakeordie/sd_upscaler_additions.git && \
+    git lfs clone https://github.com/stakeordie/sd_upscaler_additions.git && \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
     cp -a /sd_upscaler_additions/. ${ROOT}/models/
     #cd stable-diffusion-webui
