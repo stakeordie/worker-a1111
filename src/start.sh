@@ -7,6 +7,7 @@ ls -ls /upscalers
 ls -ls /upscalers/ScuNET
 ls -la /stable-diffusion-webui
 ls -la /stable-diffusion-webui/models
+ls -la /stable-diffusion-webui/models/ScuNET
 ls -la /stable-diffusion-webui/models/RealESRGAN
 
 echo $MODEL
