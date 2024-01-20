@@ -53,7 +53,8 @@ RUN apt-get update && \
     fonts-dejavu-core rsync git jq moreutils aria2 wget libgoogle-perftools-dev procps libgl1 libglib2.0-0 && \
     apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && apt-get clean -y
 
-RUN apt-get install git-lfs -y && \
+RUN curl -O https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh && bash script.deb.sh && \
+    apt-get install git-lfs -y && \
     git lfs install
 
 RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \
