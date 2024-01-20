@@ -68,6 +68,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 COPY --from=download /repositories/ ${ROOT}/repositories/
 ARG model
 COPY --from=download /${model} /${model}
+COPY --from=download /upscalers /upscalers
 RUN mkdir ${ROOT}/interrogate && cp ${ROOT}/repositories/clip-interrogator/data/* ${ROOT}/interrogate
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install -r ${ROOT}/repositories/CodeFormer/requirements.txt
