@@ -3,6 +3,8 @@
 echo "Worker Initiated"
 
 ls -la /
+ls -ls /upscalers
+ls -ls /upscalers/ScuNET
 ls -la /stable-diffusion-webui
 ls -la /stable-diffusion-webui/models
 ls -la /stable-diffusion-webui/models/RealESRGAN
