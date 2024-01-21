@@ -35,7 +35,7 @@ RUN echo "model = $model ${model}"
 # ---------------------------------------------------------------------------- #
 FROM python:3.10.6-slim as build_final_image
 
-#ARG SHA=5ef669de080814067961f28357256e8fe27544f4
+ARG SHA=68f336bd994bed5442ad95bad6b6ad5564a5409a
 ARG model
 ARG half=--no-half-vae
 ARG lora=--lora-dir /runpod-volume/loras
@@ -68,8 +68,8 @@ COPY --from=download /upscalers /upscalers
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
     cp -a /upscalers/. ${ROOT}/models/
-    #cd stable-diffusion-webui
-    # && \ git reset --hard ${SHA}
+    cd stable-diffusion-webui
+    && \ git reset --hard ${SHA}
 #&& \ pip install -r requirements_versions.txt
 
 COPY --from=download /repositories/ ${ROOT}/repositories/
