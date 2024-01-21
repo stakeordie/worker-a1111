@@ -37,12 +37,14 @@ FROM python:3.10.6-slim as build_final_image
 
 #ARG SHA=5ef669de080814067961f28357256e8fe27544f4
 ARG model
+ARG half=--no-half-vae
 ENV DEBIAN_FRONTEND=noninteractive \
     PIP_PREFER_BINARY=1 \
     LD_PRELOAD=libtcmalloc.so \
     ROOT=/stable-diffusion-webui \
     PYTHONUNBUFFERED=1 \
-    MODEL=${model}
+    MODEL=${model} \
+    HALF=${half}
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
