@@ -38,14 +38,17 @@ FROM python:3.10.6-slim as build_final_image
 #ARG SHA=5ef669de080814067961f28357256e8fe27544f4
 ARG model
 ARG half=--no-half-vae
+ARG lora=--lora-dir /runpod-volume/loras
 RUN echo "HALF = $half"
+RUN echo "LORA = $lora"
 ENV DEBIAN_FRONTEND=noninteractive \
     PIP_PREFER_BINARY=1 \
     LD_PRELOAD=libtcmalloc.so \
     ROOT=/stable-diffusion-webui \
     PYTHONUNBUFFERED=1 \
     MODEL=${model} \
-    HALF=${half}
+    HALF=${half} \
+    LORA=${lora}
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -98,4 +101,6 @@ RUN apt-get autoremove -y && \
 # Set permissions and specify the command to run
 RUN chmod +x /start.sh
 ARG model
+ARG half=--no-half-vae
+ARG lora
 CMD /start.sh
