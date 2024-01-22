@@ -94,10 +94,11 @@ ARG model
 ARG half=--no-half-vae
 RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /${model} ${half}
 # Cleanup section (Worker Template)
-RUN apt-get autoremove -y && \
+RUN apt-get update -y && \
+    apt-get install nano -y && \
+    apt-get autoremove -y && \
     apt-get clean -y && \
-    rm -rf /var/lib/apt/lists/* && \
-    apt-get install nano 
+    rm -rf /var/lib/apt/lists/*
 
 # Set permissions and specify the command to run
 RUN chmod +x /start.sh
