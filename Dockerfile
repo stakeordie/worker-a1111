@@ -39,6 +39,8 @@ ARG SHA=5ef669de080814067961f28357256e8fe27544f4
 ARG model
 ARG half=--no-half-vae
 ARG lora=--lora-dir /runpod-volume/loras
+ARG local="false"
+ARG local_port=8080
 RUN echo "HALF = $half"
 RUN echo "LORA = $lora"
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -48,7 +50,9 @@ ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONUNBUFFERED=1 \
     MODEL=${model} \
     HALF=${half} \
-    LORA=${lora}
+    LORA=${lora} \
+    LOCAL=${local} \
+    LOCAL_PORT=${local_port}
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 

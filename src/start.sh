@@ -2,24 +2,18 @@
 
 echo "Worker Initiated"
 
-ls -la /
-ls -la /models
-ls -ls /upscalers
-ls -ls /upscalers/ScuNET
-ls -la /stable-diffusion-webui
-ls -la /stable-diffusion-webui/models
-ls -la /stable-diffusion-webui/models/ScuNET
-ls -la /stable-diffusion-webui/models/RealESRGAN
-
 echo $MODEL
 echo $HALF
 echo $LORA
+echo $LOCAL
+echo $PORT
 
 echo "Starting WebUI API"
-echo `/stable-diffusion-webui/webui.py --skip-python-version-check --skip-torch-cuda-test --skip-install --ckpt /${MODEL} $LORA --opt-sdp-no-mem-attention --disable-safe-unpickle --port 3000 --api --nowebui --skip-version-check --no-download-sd-model ${HALF}`
-python /stable-diffusion-webui/webui.py --skip-python-version-check --skip-torch-cuda-test --skip-install --ckpt /${MODEL} $LORA --opt-sdp-no-mem-attention --disable-safe-unpickle --port 3000 --api --nowebui --skip-version-check --no-download-sd-model ${HALF}
+  python /stable-diffusion-webui/webui.py --skip-python-version-check --skip-torch-cuda-test --skip-install --ckpt /${MODEL} $LORA --opt-sdp-no-mem-attention --disable-safe-unpickle --port 3000 --api --nowebui --skip-version-check --no-download-sd-model ${HALF}
 echo "Starting RunPod Handler"
 
-if [ "1" == "0" ]; then
-  python -u /rp_handler.py
+if [ "$LOCAL" == "true" ]; then
+  python -u rp_handler.py --rp_serve_api --rp_api_host '127.0.0.1' --rp_api_port $LOCAL_PORT
+else
+  python -u rp_handler.py
 fi
