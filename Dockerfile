@@ -39,7 +39,6 @@ ARG SHA=5ef669de080814067961f28357256e8fe27544f4
 ARG model
 ARG half=--no-half-vae
 ARG lora=--lora-dir /runpod-volume/loras
-ARG persist="false"
 RUN echo "HALF = $half"
 RUN echo "LORA = $lora"
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -49,8 +48,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONUNBUFFERED=1 \
     MODEL=${model} \
     HALF=${half} \
-    LORA=${lora} \
-    PERSIST=${persist}
+    LORA=${lora}
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -102,7 +100,4 @@ RUN apt-get autoremove -y && \
 
 # Set permissions and specify the command to run
 RUN chmod +x /start.sh
-ARG model
-ARG half=--no-half-vae
-ARG lora
 CMD /start.sh
