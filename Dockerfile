@@ -57,7 +57,7 @@ RUN export TORCH_COMMAND='pip install --pre torch torchvision torchaudio --extra
 
 RUN apt-get update && \
     apt install -y \
-    fonts-dejavu-core rsync git jq moreutils aria2 wget libgoogle-perftools-dev procps libgl1 libglib2.0-0 nano && \
+    fonts-dejavu-core rsync git jq moreutils aria2 wget libgoogle-perftools-dev procps libgl1 libglib2.0-0 && \
     apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && apt-get clean -y
 
 
@@ -96,7 +96,8 @@ RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /${model}
 # Cleanup section (Worker Template)
 RUN apt-get autoremove -y && \
     apt-get clean -y && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get install nano 
 
 # Set permissions and specify the command to run
 RUN chmod +x /start.sh
