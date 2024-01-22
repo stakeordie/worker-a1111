@@ -20,7 +20,6 @@ echo "Starting WebUI API"
 python /stable-diffusion-webui/webui.py --skip-python-version-check --skip-torch-cuda-test --skip-install --ckpt /${MODEL} $LORA --opt-sdp-no-mem-attention --disable-safe-unpickle --port 3000 --api --nowebui --skip-version-check --no-download-sd-model ${HALF} &
 echo "Starting RunPod Handler"
 
-if(1==0) {
-python -u /rp_handler.py
-} else {
-}
+if [ "1" == "0" ]; then
+  python -u /rp_handler.py
+fi
