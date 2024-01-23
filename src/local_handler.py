@@ -48,7 +48,9 @@ def run_inference(inference_request):
 
     input_settings = inference_request["prompt"]
     input_settings["image"] = ''
+    input_settings["images"] = ''
     res_for_write = response.json()
+    res_for_write["image"] = ''
     res_for_write['images'] = ''
 
 
