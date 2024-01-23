@@ -6,7 +6,7 @@ echo "MODEL $MODEL"
 echo "HALF: $HALF"
 echo "LORA: $LORA"
 echo "LOCAL: $LOCAL"
-echo "PORT: $PORT"
+echo "PORT: $LOCAL_PORT"
 
 echo "Starting WebUI API"
 
