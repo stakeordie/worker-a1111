@@ -49,7 +49,7 @@ def run_inference(inference_request):
     today = str(date.today())
     file_name = f'logs/{today}.json'
     f = open(file_name, "a")
-    f.write(response.json())
+    f.write(str(response.json()))
     f.close()
 
     return response.json()
