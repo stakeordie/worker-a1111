@@ -95,7 +95,7 @@ ADD src .
 
 COPY builder/cache.py /stable-diffusion-webui/cache.py
 ARG model
-ARG half="--no-half-vae --precision full --no-half"
+ARG half="--no-half-vae --precision full --no-half --disable-safe-unpickle"
 RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /${model} ${half}
 # Cleanup section (Worker Template)
 RUN apt-get update -y && \
