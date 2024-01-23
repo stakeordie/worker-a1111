@@ -46,12 +46,16 @@ def run_inference(inference_request):
         response = automatic_session.post(url=f'{LOCAL_URL}/txt2img',
                                       json=inference_request["prompt"], timeout=600)
 
+    res_for_write = response
+    res_for_write['image'] = ''
+
+
     today = str(date.today())
     file_name = f'logs/{today}.json'
     f = open(file_name, "a")
-    f.write(str(response.json()))
+    f.write(str(res_for_write.json()))
     f.close()
-
+    
     return response.json()
 
 # ---------------------------------------------------------------------------- #
