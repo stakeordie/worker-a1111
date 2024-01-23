@@ -3,7 +3,7 @@ import time
 import runpod
 import requests
 from requests.adapters import HTTPAdapter, Retry
-from datetime import datetime
+from datetime import date
 
 LOCAL_URL = "http://127.0.0.1:3000/sdapi/v1"
 
@@ -46,8 +46,9 @@ def run_inference(inference_request):
         response = automatic_session.post(url=f'{LOCAL_URL}/txt2img',
                                       json=inference_request["prompt"], timeout=600)
 
-    date_time = now.strftime("%m/%d/%Y")
-    f = open('logs/{date_time}.json', "w")
+    today = str(date.today())
+    file_name = f'logs/{today}.json'
+    f = open(file_name, "a")
     f.write(response.json())
     f.close()
 

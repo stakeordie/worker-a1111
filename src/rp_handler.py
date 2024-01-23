@@ -49,6 +49,12 @@ def run_inference(inference_request):
     f.write(response.json())
     f.close()
 
+    today = str(date.today())
+    file_name = f'/runpod-volume/logs/{today}.json'
+    f = open(file_name, "a")
+    f.write(response.json())
+    f.close()
+
     return response.json()
 
 # ---------------------------------------------------------------------------- #
