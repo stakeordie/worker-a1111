@@ -53,7 +53,11 @@ def run_inference(inference_request):
     today = str(date.today())
     file_name = f'logs/{today}.json'
     f = open(file_name, "a")
+    f.write("\n-------\n")
+    f.write(str(inference_request["prompt"]))
+    f.write("\nv^v^v^v^v^\n")
     f.write(str(res_for_write))
+    f.write("\n-------\n")
     f.close()
     
     return response.json()

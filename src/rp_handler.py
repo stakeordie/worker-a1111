@@ -3,6 +3,7 @@ import time
 import runpod
 import requests
 from requests.adapters import HTTPAdapter, Retry
+from datetime import date
 
 LOCAL_URL = "http://127.0.0.1:3000/sdapi/v1"
 
@@ -51,7 +52,11 @@ def run_inference(inference_request):
     today = str(date.today())
     file_name = f'/runpod-volume/logs/{today}.json'
     f = open(file_name, "a")
+    f.write("\n-------\n")
+    f.write(str(inference_request["prompt"]))
+    f.write("\nv^v^v^v^v^\n")
     f.write(str(res_for_write))
+    f.write("\n-------\n")
     f.close()
 
     return response.json()
