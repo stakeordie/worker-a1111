@@ -99,7 +99,7 @@ ARG half=--no-half-vae
 RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /${model} ${half}
 # Cleanup section (Worker Template)
 RUN apt-get update -y && \
-    apt-get install nano -y && \
+    apt-get install nano curl ping -y && \
     apt-get autoremove -y && \
     apt-get clean -y && \
     rm -rf /var/lib/apt/lists/*
