@@ -70,7 +70,7 @@ RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip 
 
 COPY --from=download /upscalers /upscalers
 RUN --mount=type=cache,target=/root/.cache/pip \
-    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
+    git clone https://github.com/stakeordie/stable-diffusion-webui.git && \
     cp -a /upscalers/. ${ROOT}/models/
 #    cd stable-diffusion-webui && \
 #    git reset --hard ${SHA}
