@@ -38,7 +38,7 @@ FROM python:3.10.6-slim as build_final_image
 #ARG SHA=5ef669de080814067961f28357256e8fe27544f4
 ARG model
 ARG half=--no-half-vae
-ARG lora=--lora-dir /runpod-volume/loras
+ARG lora="--lora-dir /runpod-volume/loras"
 ARG local="false"
 ARG local_port=8080
 RUN echo "HALF = $half"
