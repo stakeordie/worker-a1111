@@ -2,11 +2,11 @@
 
 echo "Worker Initiated"
 
-echo $MODEL
-echo $HALF
-echo $LORA
-echo $LOCAL
-echo $PORT
+echo "MODEL $MODEL"
+echo "HALF: $HALF"
+echo "LORA: $LORA"
+echo "LOCAL: $LOCAL"
+echo "PORT: $PORT"
 
 echo "Starting WebUI API"
 
