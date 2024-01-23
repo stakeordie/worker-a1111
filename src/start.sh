@@ -14,9 +14,9 @@ python /stable-diffusion-webui/webui.py --skip-python-version-check --skip-torch
 
 echo "Starting RunPod Handler"
 
-mkdir logs
 
 if [ "$LOCAL" == "true" ]; then
+  mkdir logs
   python -u local_handler.py --rp_serve_api --rp_api_host '0.0.0.0' --rp_api_port $LOCAL_PORT
 else
   python -u rp_handler.py
