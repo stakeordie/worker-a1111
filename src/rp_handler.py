@@ -44,17 +44,16 @@ def run_inference(inference_request):
     else:
         response = automatic_session.post(url=f'{LOCAL_URL}/txt2img',
                                       json=inference_request["prompt"], timeout=600)
-    date_time = now.strftime("%m/%d/%Y")
-    f = open('/runpod-volume/logs/{date_time}.json', "w")
-    f.write(response.json())
-    f.close()
+                                      
+    res_for_write = response.json()
+    res_for_write['images'] = ''
+
 
     today = str(date.today())
     file_name = f'/runpod-volume/logs/{today}.json'
     f = open(file_name, "a")
-    f.write(srt(response.json()))
+    f.write(str(res_for_write))
     f.close()
-
 
     return response.json()
 
