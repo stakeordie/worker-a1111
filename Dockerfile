@@ -1,8 +1,6 @@
 # ---------------------------------------------------------------------------- #
 #                         Stage 1: Download the models                         #
 # ---------------------------------------------------------------------------- #
-ARG added_stuff=other
-
 FROM alpine/git:2.36.2 as download1
 
 COPY builder/clone.sh /clone.sh
@@ -52,7 +50,7 @@ COPY models/${model} /${model}
 RUN echo "model = $model ${model}"
 
 ## test
-
+ARG added_stuff=other
 FROM download2-${added_stuff} as download
 
 #MODEL = $MODEL
@@ -120,6 +118,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 #test
 
+ARG added_stuff=other
 FROM build_final_image_stage_1-${refiner} as build_final_image
 
 #    git reset --hard ${SHA}
