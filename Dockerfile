@@ -26,6 +26,7 @@ RUN apk add --no-cache wget
 ARG model
 COPY models/${model} /${model}
 COPY upscalers /upscalers
+COPY added_files /added_files
 
 RUN echo "model = $model ${model}"
 #MODEL = $MODEL
@@ -71,7 +72,8 @@ RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip 
 COPY --from=download /upscalers /upscalers
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
-    cp -a /upscalers/. ${ROOT}/models/
+    cp -a /upscalers/. ${ROOT}/models/ && \
+    cp -a /added_files/. ${ROOT}/
 #    cd stable-diffusion-webui && \
 #    git reset --hard ${SHA}
 #&& \ pip install -r requirements_versions.txt
@@ -97,6 +99,8 @@ COPY builder/cache.py /stable-diffusion-webui/cache.py
 ARG model
 ARG half="--no-half-vae --disable-safe-unpickle"
 RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /${model} ${half}
+
+RUN python /stable-diffusion-webui/webui.py --skip-python-version-check --skip-torch-cuda-test --skip-install --ckpt /${MODEL} $LORA --opt-sdp-no-mem-attention --disable-safe-unpickle --port 3000 --api --nowebui --skip-version-check --no-download-sd-model ${HALF} &
 # Cleanup section (Worker Template)
 RUN apt-get update -y && \
     apt-get install nano curl -y && \
