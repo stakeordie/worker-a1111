@@ -70,11 +70,13 @@ RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip 
     pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
 COPY --from=download /upscalers /upscalers
+COPY --from=download /added_files /added_files
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
     cp -a /upscalers/. ${ROOT}/models/ && \
-    cp -a /added_files/. ${ROOT}/
-#    cd stable-diffusion-webui && \
+    cp -a /added_files/. ${ROOT}/ && \
+    cd stable-diffusion-webui && \
+    mkdir config_states
 #    git reset --hard ${SHA}
 #&& \ pip install -r requirements_versions.txt
 
