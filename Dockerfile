@@ -24,6 +24,8 @@ RUN apk add --no-cache wget
 
 #COPY models/v2-1_768-ema-pruned.ckpt /model.ckpt
 
+RUN echo "download2${refiner}"
+
 FROM download1 as download2true
 
 ARG model
