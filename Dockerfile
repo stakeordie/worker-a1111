@@ -1,6 +1,8 @@
 # ---------------------------------------------------------------------------- #
 #                         Stage 1: Download the models                         #
 # ---------------------------------------------------------------------------- #
+ARG refiner=""
+
 FROM alpine/git:2.36.2 as download1
 
 COPY builder/clone.sh /clone.sh
@@ -23,29 +25,30 @@ RUN . /clone.sh BLIP https://github.com/salesforce/BLIP.git 48211a1594f1321b00f1
 RUN apk add --no-cache wget
 
 #COPY models/v2-1_768-ema-pruned.ckpt /model.ckpt
-ARG refiner=""
 RUN echo "download2${refiner}"
 
-FROM download1 as download2true
+## refiner?
+## true
 
+FROM download1 as download2true
 ARG model
 COPY models/${model} /${model}
 COPY upscalers /upscalers
 COPY refiner /refiner
 COPY added_files /added_files
-
 RUN echo "model = $model ${model}"
 
-FROM download1 as download2
+## false
 
+FROM download1 as download2
 ARG model
 COPY models/${model} /${model}
 COPY upscalers /upscalers
 COPY added_files /added_files
-
 RUN echo "model = $model ${model}"
 
-ARG refiner=""
+## try
+
 FROM download2${refiner} as download 
 
 #MODEL = $MODEL
