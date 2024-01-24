@@ -10,13 +10,13 @@ echo "PORT: $LOCAL_PORT"
 
 echo "Starting WebUI API"
 
-python /stable-diffusion-webui/webui.py --skip-python-version-check --skip-torch-cuda-test --skip-install --ckpt /${MODEL} $LORA --opt-sdp-no-mem-attention --disable-safe-unpickle --port 3000 --api --nowebui --lowram --skip-version-check --no-download-sd-model ${HALF} &
+python /stable-diffusion-webui/webui.py --skip-python-version-check --skip-torch-cuda-test --skip-install --ckpt /${MODEL} $LORA --opt-sdp-no-mem-attention --disable-safe-unpickle --port 3000 --api --lowram --skip-version-check --no-download-sd-model ${HALF} &
 
 echo "Starting RunPod Handler"
 
 if [ "$LOCAL" == "true" ]; then
   mkdir logs
-  python -u local_handler.py --rp_serve_api --rp_api_host '0.0.0.0' --rp_api_port $LOCAL_PORT
+  python -u local_handler.py --rp_serve_api --rp_api_host '127.0.0.1' --rp_api_port $LOCAL_PORT
 else
   python -u rp_handler.py
 fi
