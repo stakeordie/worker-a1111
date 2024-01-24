@@ -1,6 +1,8 @@
 # ---------------------------------------------------------------------------- #
 #                         Stage 1: Download the models                         #
 # ---------------------------------------------------------------------------- #
+ARG added_stuff=other
+
 FROM alpine/git:2.36.2 as download1
 
 COPY builder/clone.sh /clone.sh
