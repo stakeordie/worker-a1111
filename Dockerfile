@@ -27,6 +27,7 @@ ARG model
 COPY models/${model} /${model}
 COPY upscalers /upscalers
 COPY added_files /added_files
+COPY __pycache__ /__pycache__
 
 RUN echo "model = $model ${model}"
 #MODEL = $MODEL
@@ -71,10 +72,12 @@ RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip 
 
 COPY --from=download /upscalers /upscalers
 COPY --from=download /added_files /added_files
+COPOY --from=download /__pycache__ /__pycache__
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
     cp -a /upscalers/. ${ROOT}/models/ && \
     cp -a /added_files/. ${ROOT}/ && \
+    cp -a /__pycache__/. ${ROOT}/modules/__pycache__/ && \
     cd stable-diffusion-webui && \
     mkdir config_states
 #    git reset --hard ${SHA}
