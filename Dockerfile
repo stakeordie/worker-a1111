@@ -119,7 +119,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 #test
 
 ARG added_stuff=other
-FROM build_final_image_stage_1-${refiner} as build_final_image
+FROM build_final_image_stage_1-${added_stuff} as build_final_image
 
 #    git reset --hard ${SHA}
 #&& \ pip install -r requirements_versions.txt
