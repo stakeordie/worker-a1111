@@ -23,7 +23,7 @@ RUN . /clone.sh BLIP https://github.com/salesforce/BLIP.git 48211a1594f1321b00f1
 RUN apk add --no-cache wget
 
 #COPY models/v2-1_768-ema-pruned.ckpt /model.ckpt
-
+ARG refiner=""
 RUN echo "download2${refiner}"
 
 FROM download1 as download2true
