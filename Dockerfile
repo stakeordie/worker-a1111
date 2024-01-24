@@ -100,9 +100,8 @@ ADD src .
 COPY builder/cache.py /stable-diffusion-webui/cache.py
 ARG model
 ARG half="--no-half-vae --disable-safe-unpickle"
-RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /${model} ${half}
+RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /${model}
 
-RUN python /stable-diffusion-webui/webui.py --skip-python-version-check --skip-torch-cuda-test --skip-install --ckpt /${MODEL} $LORA --opt-sdp-no-mem-attention --disable-safe-unpickle --port 3000 --api --nowebui --skip-version-check --no-download-sd-model ${HALF} &
 # Cleanup section (Worker Template)
 RUN apt-get update -y && \
     apt-get install nano curl -y && \
