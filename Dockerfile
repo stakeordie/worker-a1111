@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------- #
 #                         Stage 1: Download the models                         #
 # ---------------------------------------------------------------------------- #
-ARG refiner=""
+ARG added_stuff=other
 
 FROM alpine/git:2.36.2 as download1
 
@@ -27,29 +27,33 @@ RUN apk add --no-cache wget
 #COPY models/v2-1_768-ema-pruned.ckpt /model.ckpt
 RUN echo "download2${refiner}"
 
-## refiner?
-## true
+## imports?
+#sdxl
 
-FROM download1 as download2true
+FROM download1 as download2-sdxl
 ARG model
 COPY models/${model} /${model}
-COPY upscalers /upscalers
 COPY refiner /refiner
-COPY added_files /added_files
 RUN echo "model = $model ${model}"
 
-## false
+#upscaler
 
-FROM download1 as download2
+FROM download1 as download2-upscaler
 ARG model
 COPY models/${model} /${model}
 COPY upscalers /upscalers
-COPY added_files /added_files
 RUN echo "model = $model ${model}"
 
-## try
+#other
 
-FROM download2${refiner} as download 
+FROM download1 as download2-other
+ARG model
+COPY models/${model} /${model}
+RUN echo "model = $model ${model}"
+
+## test
+
+FROM download2-${added_stuff} as download
 
 #MODEL = $MODEL
 
@@ -91,26 +95,35 @@ RUN apt-get update && \
 RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \
     pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
-COPY --from=download /upscalers /upscalers
-COPY --from=download /added_files /added_files
-RUN --mount=type=cache,target=/root/.cache/pip \
-    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
-    cp -a /upscalers/. ${ROOT}/models/ && \
-    cp -a /added_files/. ${ROOT}/ && \
-    cd stable-diffusion-webui && \
-    mkdir config_states
-#    git reset --hard ${SHA}
-#&& \ pip install -r requirements_versions.txt
+## imports?
+#sdxl
 
-FROM build_final_image_stage_1 as build_final_image_stage_1true
-
+FROM build_final_image_stage_1 as build_final_image_stage_1-sdxl
 COPY --from=download /refiner /refiner
 RUN --mount=type=cache,target=/root/.cache/pip \
+    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
     cp -a /refiner/. ${ROOT}/models/
 
-ARG refiner=""
-FROM build_final_image_stage_1${refiner} as build_final_image
+#upscaler
 
+FROM build_final_image_stage_1 as build_final_image_stage_1-upscaler
+COPY --from=download /upscalers /upscalers
+RUN --mount=type=cache,target=/root/.cache/pip \
+    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
+    cp -a /upscalers/. ${ROOT}/models/
+
+#other
+
+FROM build_final_image_stage_1 as build_final_image_stage_1-other
+RUN --mount=type=cache,target=/root/.cache/pip \
+    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
+
+#test
+
+FROM build_final_image_stage_1-${refiner} as build_final_image
+
+#    git reset --hard ${SHA}
+#&& \ pip install -r requirements_versions.txt
 
 COPY --from=download /repositories/ ${ROOT}/repositories/
 ARG model
