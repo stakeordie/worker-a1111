@@ -2,6 +2,7 @@
 #                         Stage 1: Download the models                         #
 # ---------------------------------------------------------------------------- #
 ARG added_stuff=other
+ARG model
 
 FROM alpine/git:2.36.2 as download1
 
@@ -25,34 +26,30 @@ RUN . /clone.sh BLIP https://github.com/salesforce/BLIP.git 48211a1594f1321b00f1
 RUN apk add --no-cache wget
 
 #COPY models/v2-1_768-ema-pruned.ckpt /model.ckpt
-RUN echo "download2${refiner}"
+RUN echo "download2${added_stuff}"
 
 ## imports?
 #sdxl
-
 FROM download1 as download2-sdxl
-ARG model
 COPY models/${model} /${model}
 COPY refiner /refiner
 RUN echo "model = $model ${model}"
+RUN echo "download2${added_stuff}"
 
 #upscaler
-
 FROM download1 as download2-upscaler
-ARG model
 COPY models/${model} /${model}
 COPY upscalers /upscalers
 RUN echo "model = $model ${model}"
+RUN echo "download2${added_stuff}"
 
 #other
-
 FROM download1 as download2-other
-ARG model
 COPY models/${model} /${model}
 RUN echo "model = $model ${model}"
+RUN echo "download2${added_stuff}"
 
 ## test
-ARG added_stuff=other
 FROM download2-${added_stuff} as download
 
 #MODEL = $MODEL
@@ -97,7 +94,6 @@ RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip 
 
 ## imports?
 #sdxl
-
 FROM build_final_image_stage_1 as build_final_image_stage_1-sdxl
 COPY --from=download /refiner /refiner
 RUN --mount=type=cache,target=/root/.cache/pip \
@@ -105,7 +101,6 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     cp -a /refiner/. ${ROOT}/models/
 
 #upscaler
-
 FROM build_final_image_stage_1 as build_final_image_stage_1-upscaler
 COPY --from=download /upscalers /upscalers
 RUN --mount=type=cache,target=/root/.cache/pip \
@@ -113,21 +108,18 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     cp -a /upscalers/. ${ROOT}/models/
 
 #other
-
 FROM build_final_image_stage_1 as build_final_image_stage_1-other
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
 
 #test
-
-ARG added_stuff=other
 FROM build_final_image_stage_1-${added_stuff} as build_final_image
 
 #    git reset --hard ${SHA}
 #&& \ pip install -r requirements_versions.txt
 
 COPY --from=download /repositories/ ${ROOT}/repositories/
-ARG model
+
 COPY --from=download /${model} /${model}
 
 RUN mkdir ${ROOT}/interrogate && cp ${ROOT}/repositories/clip-interrogator/data/* ${ROOT}/interrogate
