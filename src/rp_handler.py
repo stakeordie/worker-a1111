@@ -84,4 +84,6 @@ if __name__ == "__main__":
 
     print("WebUI API Service is ready. Starting RunPod...")
 
+    automatic_session.post(url=f'{LOCAL_URL}/txt2img', json={"prompt":"test","steps":"1"}, timeout=600)
+
     runpod.serverless.start({"handler": handler})
