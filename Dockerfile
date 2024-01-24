@@ -98,8 +98,6 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 ADD src .
 
 COPY builder/cache.py /stable-diffusion-webui/cache.py
-ARG model
-ARG half="--no-half-vae --disable-safe-unpickle"
 RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /${model}
 
 # Cleanup section (Worker Template)
