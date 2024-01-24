@@ -23,16 +23,8 @@ RUN . /clone.sh BLIP https://github.com/salesforce/BLIP.git 48211a1594f1321b00f1
 RUN apk add --no-cache wget
 
 #COPY models/v2-1_768-ema-pruned.ckpt /model.ckpt
-FROM download1 as download2
 
-ARG model
-COPY models/${model} /${model}
-COPY upscalers /upscalers
-COPY added_files /added_files
-
-RUN echo "model = $model ${model}"
-
-FROM download1 as download2sdxl
+FROM download1 as download2true
 
 ARG model
 COPY models/${model} /${model}
@@ -42,8 +34,17 @@ COPY added_files /added_files
 
 RUN echo "model = $model ${model}"
 
-ARG sdxl=""
-FROM download2${sdxl} as download 
+FROM download1 as download2
+
+ARG model
+COPY models/${model} /${model}
+COPY upscalers /upscalers
+COPY added_files /added_files
+
+RUN echo "model = $model ${model}"
+
+ARG refiner=""
+FROM download2${refiner} as download 
 
 #MODEL = $MODEL
 
@@ -96,16 +97,14 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 #    git reset --hard ${SHA}
 #&& \ pip install -r requirements_versions.txt
 
-FROM build_final_image_stage_1 as build_final_image_stage_2-sdxl
+FROM build_final_image_stage_1 as build_final_image_stage_1true
 
 COPY --from=download /refiner /refiner
 RUN --mount=type=cache,target=/root/.cache/pip \
     cp -a /refiner/. ${ROOT}/models/
 
-FROM build_final_image_stage_1 as build_final_image_stage_2
-
-ARG sdxl=""
-FROM build_final_image_stage_2${sdxl} as build_final_image
+ARG refiner=""
+FROM build_final_image_stage_1${refiner} as build_final_image
 
 
 COPY --from=download /repositories/ ${ROOT}/repositories/
