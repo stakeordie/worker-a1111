@@ -35,6 +35,7 @@ COPY models/${model} /${model}
 COPY refiner /refiner
 RUN echo "model = $model ${model}"
 RUN echo "download2${added_stuff}"
+ENV UPSCALER=""
 
 #upscaler
 FROM download1 as download2-upscaler
@@ -42,12 +43,14 @@ COPY models/${model} /${model}
 COPY upscalers /upscalers
 RUN echo "model = $model ${model}"
 RUN echo "download2${added_stuff}"
+ENV UPSCALER="--upscaler"
 
 #other
 FROM download1 as download2-other
 COPY models/${model} /${model}
 RUN echo "model = $model ${model}"
 RUN echo "download2${added_stuff}"
+ENV UPSCALER=""
 
 ## test
 FROM download2-${added_stuff} as download
