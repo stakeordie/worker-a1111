@@ -112,6 +112,7 @@ COPY --from=download /upscalers /upscalers
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
     cp -a /upscalers/. ${ROOT}/models/
+ENV UPSCALER="--upscaler"
 
 #other
 FROM build_final_image_stage_1 as build_final_image_stage_1-other
