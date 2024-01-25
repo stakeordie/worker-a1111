@@ -1,9 +1,16 @@
 import time
+import argparse
 
 import runpod
 import requests
 from requests.adapters import HTTPAdapter, Retry
 from datetime import date
+
+parser = argparse.ArgumentParser(description="RunPod Handler")
+
+parser.add_argument("upscaler", action=argparse.BooleanOptionalAction, default=false)
+
+args = parser.parse_args()
 
 LOCAL_URL = "http://127.0.0.1:3000/sdapi/v1"
 
@@ -72,6 +79,8 @@ def handler(event):
     '''
     This is the handler function that will be called by the serverless.
     '''
+    if args.upscaler:
+        automatic_session.post(url=f'{LOCAL_URL}/txt2img', json={"prompt":"test","steps":"1"}, timeout=600)
 
     json = run_inference(event["input"])
 
