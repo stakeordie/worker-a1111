@@ -1,9 +1,16 @@
 import time
+import argparse
 
 import runpod
 import requests
 from requests.adapters import HTTPAdapter, Retry
 from datetime import date
+
+parser = argparse.ArgumentParser(description="RunPod Handler")
+
+parser.add_argument("upscaler", action=argparse.BooleanOptionalAction, default=False)
+
+args = parser.parse_args()
 
 LOCAL_URL = "http://0.0.0.0:3000/sdapi/v1"
 
@@ -74,7 +81,8 @@ def handler(event):
     This is the handler function that will be called by the serverless.
     '''
 
-    automatic_session.post(url=f'{LOCAL_URL}/txt2img', json={"prompt":"test","steps":"1"}, timeout=600)
+    if args.upscaler:
+        automatic_session.post(url=f'{LOCAL_URL}/txt2img', json={"prompt":"test","steps":"1"}, timeout=600)
 
     json = run_inference(event["input"])
 
@@ -86,7 +94,5 @@ if __name__ == "__main__":
     wait_for_service(url=f'{LOCAL_URL}/txt2img')
 
     print("WebUI API Service is ready. Starting RunPod...")
-
-    # automatic_session.post(url=f'{LOCAL_URL}/txt2img', json={"prompt":"test","steps":"1"}, timeout=600)
 
     runpod.serverless.start({"handler": handler})
