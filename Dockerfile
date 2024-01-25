@@ -32,6 +32,7 @@ RUN echo "download2${added_stuff}"
 #sdxl
 FROM download1 as download2-sdxl
 COPY models/${model} /${model}
+COPY vae /vae
 COPY refiner /refiner
 RUN echo "model = $model ${model}"
 RUN echo "download2${added_stuff}"
@@ -40,6 +41,7 @@ ARG upscaler="false"
 #upscaler
 FROM download1 as download2-upscaler
 COPY models/${model} /${model}
+COPY vae /vae
 COPY upscalers /upscalers
 RUN echo "model = $model ${model}"
 RUN echo "download2${added_stuff}"
@@ -48,6 +50,7 @@ ARG upscaler="true"
 #other
 FROM download1 as download2-other
 COPY models/${model} /${model}
+COPY vae /vae
 RUN echo "model = $model ${model}"
 RUN echo "download2${added_stuff}"
 ARG upscaler="false"
@@ -99,25 +102,31 @@ RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip 
 
 ## imports?
 #sdxl
-FROM build_final_image_stage_1 as build_final_image_stage_1-sdxl
+FROM build_final_image_stage_1 as build_final_image_stage_1-refiner
+COPY --from=download /vae /vae
 COPY --from=download /refiner /refiner
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
+    cp -a /vae/. ${ROOT}/models/ && \
     cp -a /refiner/. ${ROOT}/models/
 ENV UPSCALER="false"
 
 #upscaler
 FROM build_final_image_stage_1 as build_final_image_stage_1-upscaler
+COPY --from=download /vae /vae
 COPY --from=download /upscalers /upscalers
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
+    cp -a /vae/. ${ROOT}/models/ && \
     cp -a /upscalers/. ${ROOT}/models/
 ENV UPSCALER="true"
 
 #other
 FROM build_final_image_stage_1 as build_final_image_stage_1-other
+COPY --from=download /vae /vae
 RUN --mount=type=cache,target=/root/.cache/pip \
-    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
+    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
+    cp -a /vae/. ${ROOT}/models/
 ENV UPSCALER="false"
 
 #test
