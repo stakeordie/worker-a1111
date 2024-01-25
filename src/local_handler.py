@@ -1,16 +1,9 @@
 import time
-import argparse
 
 import runpod
 import requests
 from requests.adapters import HTTPAdapter, Retry
 from datetime import date
-
-parser = argparse.ArgumentParser(description="RunPod Handler")
-
-parser.add_argument("upscaler", action=argparse.BooleanOptionalAction, default=False)
-
-args = parser.parse_args()
 
 LOCAL_URL = "http://0.0.0.0:3000/sdapi/v1"
 
