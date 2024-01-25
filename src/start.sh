@@ -19,5 +19,9 @@ if [ "$LOCAL" == "true" ]; then
   mkdir logs
   python -u local_handler.py --rp_serve_api --rp_api_host '0.0.0.0' --rp_api_port $LOCAL_PORT
 else
-  python -u rp_handler.py $UPSCALER
+  if [ "$UPSCALER" == "true" ]; then
+    python -u rp_handler_upscaler.py
+  else
+    python -u rp_handler.py
+  fi
 fi

@@ -81,8 +81,7 @@ def handler(event):
     This is the handler function that will be called by the serverless.
     '''
 
-    if args.upscaler:
-        automatic_session.post(url=f'{LOCAL_URL}/txt2img', json={"prompt":"test","steps":"1"}, timeout=600)
+    automatic_session.post(url=f'{LOCAL_URL}/txt2img', json={"prompt":"test","steps":"1"}, timeout=600)
 
     json = run_inference(event["input"])
 

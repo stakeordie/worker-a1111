@@ -35,7 +35,7 @@ COPY models/${model} /${model}
 COPY refiner /refiner
 RUN echo "model = $model ${model}"
 RUN echo "download2${added_stuff}"
-ARG upscaler=""
+ARG upscaler="false"
 
 #upscaler
 FROM download1 as download2-upscaler
@@ -43,14 +43,14 @@ COPY models/${model} /${model}
 COPY upscalers /upscalers
 RUN echo "model = $model ${model}"
 RUN echo "download2${added_stuff}"
-ARG upscaler="--upscaler"
+ARG upscaler="true"
 
 #other
 FROM download1 as download2-other
 COPY models/${model} /${model}
 RUN echo "model = $model ${model}"
 RUN echo "download2${added_stuff}"
-ARG upscaler=""
+ARG upscaler="false"
 
 ## test
 FROM download2-${added_stuff} as download
@@ -79,8 +79,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     HALF=${half} \
     LORA=${lora} \
     LOCAL=${local} \
-    LOCAL_PORT=${local_port} \
-    UPSCALER=${upscaler}
+    LOCAL_PORT=${local_port}
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -105,6 +104,7 @@ COPY --from=download /refiner /refiner
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
     cp -a /refiner/. ${ROOT}/models/
+ENV UPSCALER="false"
 
 #upscaler
 FROM build_final_image_stage_1 as build_final_image_stage_1-upscaler
@@ -112,12 +112,13 @@ COPY --from=download /upscalers /upscalers
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
     cp -a /upscalers/. ${ROOT}/models/
-ENV UPSCALER="--upscaler"
+ENV UPSCALER="true"
 
 #other
 FROM build_final_image_stage_1 as build_final_image_stage_1-other
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
+ENV UPSCALER="false"
 
 #test
 FROM build_final_image_stage_1-${added_stuff} as build_final_image
