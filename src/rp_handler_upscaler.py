@@ -87,3 +87,4 @@ if __name__ == "__main__":
     print("WebUI API Service is ready. Starting RunPod...")
 
     runpod.serverless.start({"handler": handler})
+
