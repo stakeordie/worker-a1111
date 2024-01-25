@@ -92,6 +92,8 @@ RUN apt-get update && \
 RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \
     pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
+
+
 ## imports?
 #sdxl
 FROM build_final_image_stage_1 as build_final_image_stage_1-sdxl
@@ -117,6 +119,9 @@ FROM build_final_image_stage_1-${added_stuff} as build_final_image
 
 #    git reset --hard ${SHA}
 #&& \ pip install -r requirements_versions.txt
+
+
+
 
 COPY --from=download /repositories/ ${ROOT}/repositories/
 
