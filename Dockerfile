@@ -54,7 +54,7 @@ FROM download2-${added_stuff} as download2
 ## controlnet?
 
 ## true
-FROM downoad2 as download3true
+FROM download2 as download3true
 COPY ControlNet /ControlNet
 
 ## false
