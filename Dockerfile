@@ -135,7 +135,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 ENV UPSCALER="false"
 
 #test
-FROM build_final_image_stage_2-${added_stuff} as build_final_image_stage2
+FROM build_final_image_stage_2-${added_stuff} as build_final_image_stage_2
 
 
 ## controlnet?
