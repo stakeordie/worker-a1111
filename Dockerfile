@@ -3,6 +3,8 @@
 # ---------------------------------------------------------------------------- #
 ARG added_stuff=other
 ARG model
+ARG cnet="false"
+ARG upscaler="false"
 
 FROM alpine/git:2.36.2 as download1
 
@@ -29,34 +31,37 @@ RUN apk add --no-cache wget
 RUN echo "download2${added_stuff}"
 
 ## imports?
-#sdxl
-FROM download1 as download2-sdxl
+#refiner
+FROM download1 as download2-refiner
 COPY models/${model} /${model}
 COPY vae /vae
 COPY refiner /refiner
-RUN echo "model = $model ${model}"
-RUN echo "download2${added_stuff}"
-ARG upscaler="false"
 
 #upscaler
 FROM download1 as download2-upscaler
 COPY models/${model} /${model}
 COPY vae /vae
 COPY upscalers /upscalers
-RUN echo "model = $model ${model}"
-RUN echo "download2${added_stuff}"
-ARG upscaler="true"
 
 #other
 FROM download1 as download2-other
 COPY models/${model} /${model}
 COPY vae /vae
-RUN echo "model = $model ${model}"
-RUN echo "download2${added_stuff}"
-ARG upscaler="false"
 
-## test
-FROM download2-${added_stuff} as download
+## imports-test
+FROM download2-${added_stuff} as download2
+
+## controlnet?
+
+## true
+FROM downoad2 as download3true
+COPY ControlNet /ControlNet
+
+## false
+FROM download2 as download3false
+
+## controlnet-test
+FROM download3${cnet} as download
 
 #MODEL = $MODEL
 
@@ -101,8 +106,8 @@ RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip 
 
 
 ## imports?
-#sdxl
-FROM build_final_image_stage_1 as build_final_image_stage_1-refiner
+#refiner
+FROM build_final_image_stage_1 as build_final_image_stage_2-refiner
 COPY --from=download /vae /vae
 COPY --from=download /refiner /refiner
 RUN --mount=type=cache,target=/root/.cache/pip \
@@ -112,7 +117,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 ENV UPSCALER="false"
 
 #upscaler
-FROM build_final_image_stage_1 as build_final_image_stage_1-upscaler
+FROM build_final_image_stage_1 as build_final_image_stage_2-upscaler
 COPY --from=download /vae /vae
 COPY --from=download /upscalers /upscalers
 RUN --mount=type=cache,target=/root/.cache/pip \
@@ -122,7 +127,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 ENV UPSCALER="true"
 
 #other
-FROM build_final_image_stage_1 as build_final_image_stage_1-other
+FROM build_final_image_stage_1 as build_final_image_stage_2-other
 COPY --from=download /vae /vae
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
@@ -130,7 +135,22 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 ENV UPSCALER="false"
 
 #test
-FROM build_final_image_stage_1-${added_stuff} as build_final_image
+FROM build_final_image_stage_2-${added_stuff} as build_final_image_stage2
+
+
+## controlnet?
+
+## true
+FROM build_final_image_stage_2 as build_final_image_stage_3-true
+COPY --from=download /ControlNet /ControlNet
+RUN --mount=type=cache,target=/root/.cache/pip \
+    cp -a /ControlNet ${ROOT}/models/
+
+## flase
+FROM build_final_image_stage_2 as build_final_image_stage_3-false
+
+## controlnet test
+FROM build_final_image_stage_3-${cnet} as build_final_image
 
 #    git reset --hard ${SHA}
 #&& \ pip install -r requirements_versions.txt
