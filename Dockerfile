@@ -6,7 +6,7 @@ ARG model
 ARG cnet="false"
 ARG upscaler="false"
 
-FROM alpine/git:2.36.2 as download1
+FROM alpine/git:2.36.2 as download
 
 COPY builder/clone.sh /clone.sh
 
@@ -26,42 +26,6 @@ RUN . /clone.sh BLIP https://github.com/salesforce/BLIP.git 48211a1594f1321b00f1
     . /clone.sh generative-models https://github.com/Stability-AI/generative-models 45c443b316737a4ab6e40413d7794a7f5657c19f
 
 RUN apk add --no-cache wget
-
-#COPY models/v2-1_768-ema-pruned.ckpt /model.ckpt
-RUN echo "download2${added_stuff}"
-
-## imports?
-#refiner
-FROM download1 as download2-refiner
-COPY models/${model} /${model}
-COPY vae /vae
-COPY refiner /refiner
-
-#upscaler
-FROM download1 as download2-upscaler
-COPY models/${model} /${model}
-COPY vae /vae
-COPY upscalers /upscalers
-
-#other
-FROM download1 as download2-other
-COPY models/${model} /${model}
-COPY vae /vae
-
-## imports-test
-FROM download2-${added_stuff} as download2
-
-## controlnet?
-
-## true
-FROM downoad2 as download3true
-COPY ControlNet /ControlNet
-
-## false
-FROM download2 as download3false
-
-## controlnet-test
-FROM download3${cnet} as download
 
 #MODEL = $MODEL
 
@@ -108,8 +72,8 @@ RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip 
 ## imports?
 #refiner
 FROM build_final_image_stage_1 as build_final_image_stage_2-refiner
-COPY --from=download /vae /vae
-COPY --from=download /refiner /refiner
+COPY vae /vae
+COPY refiner /refiner
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
     cp -a /vae/. ${ROOT}/models/ && \
@@ -118,8 +82,8 @@ ENV UPSCALER="false"
 
 #upscaler
 FROM build_final_image_stage_1 as build_final_image_stage_2-upscaler
-COPY --from=download /vae /vae
-COPY --from=download /upscalers /upscalers
+COPY vae /vae
+COPY upscalers /upscalers
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
     cp -a /vae/. ${ROOT}/models/ && \
@@ -128,7 +92,7 @@ ENV UPSCALER="true"
 
 #other
 FROM build_final_image_stage_1 as build_final_image_stage_2-other
-COPY --from=download /vae /vae
+COPY vae /vae
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
     cp -a /vae/. ${ROOT}/models/
@@ -142,7 +106,7 @@ FROM build_final_image_stage_2-${added_stuff} as build_final_image_stage_2
 
 ## true
 FROM build_final_image_stage_2 as build_final_image_stage_3-true
-COPY --from=download /ControlNet /ControlNet
+COPY ControlNet /ControlNet
 RUN --mount=type=cache,target=/root/.cache/pip \
     cp -a /ControlNet ${ROOT}/models/
 
@@ -160,7 +124,7 @@ FROM build_final_image_stage_3-${cnet} as build_final_image
 
 COPY --from=download /repositories/ ${ROOT}/repositories/
 
-COPY --from=download /${model} /${model}
+COPY models/${model} /${model}
 
 RUN mkdir ${ROOT}/interrogate && cp ${ROOT}/repositories/clip-interrogator/data/* ${ROOT}/interrogate
 RUN --mount=type=cache,target=/root/.cache/pip \
