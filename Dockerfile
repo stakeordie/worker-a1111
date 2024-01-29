@@ -98,7 +98,7 @@ FROM build_final_image_stage_2-${added_stuff} as build_final_image_stage_2
 ## true
 FROM build_final_image_stage_2 as build_final_image_stage_3-true
 COPY lib/extensions/. ${ROOT}/extensions/
-COPY lib/ControlNetModels/. ${ROOT}/extensions/models/
+COPY lib/ControlNetModels/. ${ROOT}/extensions/sd-webui-controlnet/models/
 
 ## flase
 FROM build_final_image_stage_2 as build_final_image_stage_3-false
