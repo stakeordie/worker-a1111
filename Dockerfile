@@ -20,7 +20,7 @@ RUN . /clone.sh stable-diffusion-stability-ai https://github.com/Stability-AI/st
 #RUN . /clone.sh CodeFormer https://github.com/sczhou/CodeFormer.git c5b4593074ba6214284d6acd5f1719b6c5d739af && \
 #    rm -rf assets inputs
 
-RUN . /clone.sh CodeFormer https://github.com/sczhou/CodeFormer.git cf2772fab0af5573da775e7437e6acdca424f26e && \
+RUN . /clone.sh CodeFormer https://github.com/sczhou/CodeFormer.git master && \
     rm -rf assets inputs
 
 RUN . /clone.sh BLIP https://github.com/salesforce/BLIP.git 3a29b7410476bf5f2ba0955827390eb6ea1f4f9d && \
