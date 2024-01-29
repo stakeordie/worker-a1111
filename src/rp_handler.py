@@ -44,18 +44,18 @@ def run_inference(inference_request):
             const buffer = Buffer.from(arrayBuffer);
             return buffer.toString("base64");
         }
-        const image = await getImage(inference_request["prompt"]["init_images"][0])
-        inference_request["prompt"]["images"][0] = image
+        const image = await getImage(inference_request["params"]["init_images"][0])
+        inference_request["params"]["images"][0] = image
         response = automatic_session.post(url=f'{LOCAL_URL}/img2img',
-                                      json=inference_request["prompt"], timeout=600)
+                                      json=inference_request["params"], timeout=600)
     elif(inference_request["type"] == "extra-single-image"):
         response = automatic_session.post(url=f'{LOCAL_URL}/extra-single-image',
-                                      json=inference_request["prompt"], timeout=600)
+                                      json=inference_request["params"], timeout=600)
     else:
         response = automatic_session.post(url=f'{LOCAL_URL}/txt2img',
-                                      json=inference_request["prompt"], timeout=600)
+                                      json=inference_request["params"], timeout=600)
 
-    # input_settings = inference_request["prompt"]
+    # input_settings = inference_request["params"]
     # input_settings["image"] = ''
     # input_settings["images"] = ''
     # res_for_write = response.json()
