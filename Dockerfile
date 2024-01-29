@@ -69,44 +69,35 @@ RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip 
 
 
 
+RUN --mount=type=cache,target=/root/.cache/pip \
+    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
+
 ## imports?
 #refiner
 FROM build_final_image_stage_1 as build_final_image_stage_2-refiner
-COPY lib/vae /vae
-COPY lib/refiner /refiner
-RUN --mount=type=cache,target=/root/.cache/pip \
-    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
-    cp -a /vae/. ${ROOT}/models/ && \
-    cp -a /refiner/. ${ROOT}/models/
+COPY lib/vae/. ${ROOT}/models/
+COPY lib/refiner/. ${ROOT}/models/
 ENV UPSCALER="false"
 
 #upscaler
 FROM build_final_image_stage_1 as build_final_image_stage_2-upscaler
-COPY lib/vae /vae
-COPY lib/upscalers /upscalers
-RUN --mount=type=cache,target=/root/.cache/pip \
-    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
-    cp -a /vae/. ${ROOT}/models/ && \
-    cp -a /upscalers/. ${ROOT}/models/
+COPY lib/vae/. ${ROOT}/models/
+COPY lib/upscalers/. ${ROOT}/models/
 ENV UPSCALER="true"
 
 #other
 FROM build_final_image_stage_1 as build_final_image_stage_2-other
-COPY lib/vae /vae
-RUN --mount=type=cache,target=/root/.cache/pip \
-    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
-    cp -a /vae/. ${ROOT}/models/
+COPY lib/vae/. ${ROOT}/models/
 ENV UPSCALER="false"
 
 #test
 FROM build_final_image_stage_2-${added_stuff} as build_final_image_stage_2
 
-
 ## controlnet?
 
 ## true
 FROM build_final_image_stage_2 as build_final_image_stage_3-true
-COPY lib/extensions/* ${ROOT}/extensions/
+COPY lib/extensions/. ${ROOT}/extensions/
 
 ## flase
 FROM build_final_image_stage_2 as build_final_image_stage_3-false
