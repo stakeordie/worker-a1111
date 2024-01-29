@@ -116,11 +116,9 @@ FROM build_final_image_stage_3-${cnet} as build_final_image
 #&& \ pip install -r requirements_versions.txt
 
 
-
+COPY lib/models/${model} /${model}
 
 COPY --from=download /repositories/ ${ROOT}/repositories/
-
-COPY lib/models/${model} /${model}
 
 RUN mkdir ${ROOT}/interrogate && cp ${ROOT}/repositories/clip-interrogator/data/* ${ROOT}/interrogate
 RUN --mount=type=cache,target=/root/.cache/pip \
