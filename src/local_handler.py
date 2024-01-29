@@ -2,6 +2,7 @@ import time
 
 import runpod
 import requests
+import fetch
 from requests.adapters import HTTPAdapter, Retry
 from datetime import date
 
@@ -37,7 +38,7 @@ def run_inference(inference_request):
     '''
 
     if(inference_request["type"] == "img2img"):
-        async function getImage(url: string) {
+        const getImage = async function(url: string) {
             const response = await fetch(url);
             if (!response.ok) throw new Error("Failed to fetch image");
             const arrayBuffer = await response.arrayBuffer();
