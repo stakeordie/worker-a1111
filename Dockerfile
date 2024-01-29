@@ -17,13 +17,19 @@ RUN . /clone.sh taming-transformers https://github.com/CompVis/taming-transforme
 RUN . /clone.sh stable-diffusion-stability-ai https://github.com/Stability-AI/stablediffusion.git 47b6b607fdd31875c9279cd2f4f16b92e4ea958e && \
     rm -rf assets data/**/*.png data/**/*.jpg data/**/*.gif
 
-RUN . /clone.sh CodeFormer https://github.com/sczhou/CodeFormer.git c5b4593074ba6214284d6acd5f1719b6c5d739af && \
+#RUN . /clone.sh CodeFormer https://github.com/sczhou/CodeFormer.git c5b4593074ba6214284d6acd5f1719b6c5d739af && \
+#    rm -rf assets inputs
+
+RUN . /clone.sh CodeFormer https://github.com/sczhou/CodeFormer.git cf2772fab0af5573da775e7437e6acdca424f26e && \
     rm -rf assets inputs
 
-RUN . /clone.sh BLIP https://github.com/salesforce/BLIP.git 48211a1594f1321b00f14c9f7a5b4813144b2fb9 && \
-    . /clone.sh k-diffusion https://github.com/crowsonkb/k-diffusion.git 5b3af030dd83e0297272d861c19477735d0317ec && \
-    . /clone.sh clip-interrogator https://github.com/pharmapsychotic/clip-interrogator 2486589f24165c8e3b303f84e9dbbea318df83e8 && \
-    . /clone.sh generative-models https://github.com/Stability-AI/generative-models 45c443b316737a4ab6e40413d7794a7f5657c19f
+RUN . /clone.sh BLIP https://github.com/salesforce/BLIP.git 3a29b7410476bf5f2ba0955827390eb6ea1f4f9d && \
+    ## 5b3af030dd83e0297272d861c19477735d0317ec
+    . /clone.sh k-diffusion https://github.com/crowsonkb/k-diffusion.git 6ab5146d4a5ef63901326489f31f1d8e7dd36b48 && \
+    ## 2486589f24165c8e3b303f84e9dbbea318df83e8
+    . /clone.sh clip-interrogator https://github.com/pharmapsychotic/clip-interrogator  bc07ce62c179d3aab3053a623d96a071101d11cb&& \
+    ## 45c443b316737a4ab6e40413d7794a7f5657c19f
+    . /clone.sh generative-models https://github.com/Stability-AI/generative-models 9d759324e914de6c96dbd1468b3a4a50243c6528 
 
 RUN apk add --no-cache wget
 
