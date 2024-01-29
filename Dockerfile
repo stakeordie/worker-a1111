@@ -81,19 +81,19 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 ## imports?
 #refiner
 FROM build_final_image_stage_1 as build_final_image_stage_2-refiner
-COPY lib/vae/. ${ROOT}/models/
+COPY lib/sub_models/. ${ROOT}/models/
 COPY lib/refiner/. ${ROOT}/models/
 ENV UPSCALER="false"
 
 #upscaler
 FROM build_final_image_stage_1 as build_final_image_stage_2-upscaler
-COPY lib/vae/. ${ROOT}/models/
+COPY lib/sub_models/. ${ROOT}/models/
 COPY lib/upscalers/. ${ROOT}/models/
 ENV UPSCALER="true"
 
 #other
 FROM build_final_image_stage_1 as build_final_image_stage_2-other
-COPY lib/vae/. ${ROOT}/models/
+COPY lib/sub_models/. ${ROOT}/models/
 ENV UPSCALER="false"
 
 #test
