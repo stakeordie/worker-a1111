@@ -25,7 +25,7 @@ RUN . /clone.sh CodeFormer https://github.com/sczhou/CodeFormer.git 8392d0334956
 
 RUN . /clone.sh BLIP https://github.com/salesforce/BLIP.git 3a29b7410476bf5f2ba0955827390eb6ea1f4f9d && \
     ## 5b3af030dd83e0297272d861c19477735d0317ec
-    . /clone.sh k-diffusion https://github.com/crowsonkb/k-diffusion.git 6ab5146d4a5ef63901326489f31f1d8e7dd36b48 && \
+    . /clone.sh k-diffusion https://github.com/crowsonkb/k-diffusion.git 5b3af030dd83e0297272d861c19477735d0317ec && \
     ## bc07ce62c179d3aab3053a623d96a071101d11cb
     . /clone.sh clip-interrogator https://github.com/pharmapsychotic/clip-interrogator 2486589f24165c8e3b303f84e9dbbea318df83e8 && \
     ## 45c443b316737a4ab6e40413d7794a7f5657c19f
