@@ -37,7 +37,6 @@ def run_inference(inference_request):
     '''
 
     if(inference_request["type"] == "img2img"):
-        if(inference_request["type"] == "img2img"):
         async function getImage(url: string) {
             const response = await fetch(url);
             if (!response.ok) throw new Error("Failed to fetch image");
