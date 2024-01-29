@@ -37,6 +37,15 @@ def run_inference(inference_request):
     '''
 
     if(inference_request["type"] == "img2img"):
+        async function getImage(url: string) {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Failed to fetch image");
+            const arrayBuffer = await response.arrayBuffer();
+            const buffer = Buffer.from(arrayBuffer);
+            return buffer.toString("base64");
+        }
+        const image = await getImage(inference_request["prompt"]["init_images"][0])
+        inference_request["prompt"]["images"][0] = image
         response = automatic_session.post(url=f'{LOCAL_URL}/img2img',
                                       json=inference_request["prompt"], timeout=600)
     elif(inference_request["type"] == "extra-single-image"):
