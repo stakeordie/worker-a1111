@@ -33,7 +33,7 @@ def wait_for_service(url):
 
 def run_inference(inference_request):
     '''
-    Run inference on a request.
+    Run inference on a request
     '''
 
     if(inference_request["type"] == "img2img"):
@@ -44,8 +44,10 @@ def run_inference(inference_request):
             const buffer = Buffer.from(arrayBuffer);
             return buffer.toString("base64");
         }
+        print("Pulling Image")
         const image = await getImage(inference_request["params"]["init_images"][0])
         inference_request["params"]["images"][0] = image
+        print("Sending to API")
         response = automatic_session.post(url=f'{LOCAL_URL}/img2img',
                                       json=inference_request["params"], timeout=600)
     elif(inference_request["type"] == "extra-single-image"):
