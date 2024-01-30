@@ -134,6 +134,7 @@ ADD src .
 COPY builder/cache.py /stable-diffusion-webui/cache.py
 RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /${model} --no-half-vae
 
+RUN cd /stable-diffusion-webui && python webui.py --skip-python-version-check --skip-torch-cuda-test --skip-install --ckpt /${model} ${lora} --opt-sdp-no-mem-attention --disable-safe-unpickle --port 3000 --api --nowebui --listen --lowram --skip-version-check --no-download-sd-model ${half}
 # Cleanup section (Worker Template)
 RUN apt-get update -y && \
     apt-get install nano curl -y && \
