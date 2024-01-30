@@ -46,23 +46,6 @@ def run_inference(inference_request):
         response = automatic_session.post(url=f'{LOCAL_URL}/txt2img',
                                       json=inference_request["prompt"], timeout=600)
 
-    # input_settings = inference_request["prompt"]
-    # input_settings["image"] = ''
-    # input_settings["images"] = ''
-    # res_for_write = response.json()
-    # res_for_write["image"] = ''
-    # res_for_write['images'] = ''
-
-    # today = str(date.today())
-    # file_name = f'/runpod-volume/logs/{today}.json'
-    # f = open(file_name, "a")
-    # f.write("\n-------\n")
-    # f.write(str(input_settings))
-    # f.write("\nv^v^v^v^v^\n")
-    # f.write(str(res_for_write))
-    # f.write("\n-------\n")
-    # f.close()
-
     return response.json()
 
 # ---------------------------------------------------------------------------- #
