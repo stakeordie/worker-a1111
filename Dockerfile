@@ -6,7 +6,7 @@ ARG model
 ARG cnet="false"
 ARG upscaler="false"
 
-FROM alpine/git:2.36.2 as download
+FROM alpine/git:2.36.2 as download1
 
 COPY builder/clone.sh /clone.sh
 
@@ -26,6 +26,27 @@ RUN . /clone.sh BLIP https://github.com/salesforce/BLIP.git 48211a1594f1321b00f1
     . /clone.sh generative-models https://github.com/Stability-AI/generative-models 45c443b316737a4ab6e40413d7794a7f5657c19f
 
 RUN apk add --no-cache wget
+
+## imports?
+#sdxl
+FROM download1 as download2-sdxl
+COPY lib/models/${model} /${model}
+COPY lib/sub_models /sub_models
+COPY lib/refiner /refiner
+
+#upscaler
+FROM download1 as download2-upscaler
+COPY models/${model} /${model}
+COPY lib/sub_models /sub_models
+COPY lib/upscalers /upscalers
+
+#other
+FROM download1 as download2-other
+COPY lib/models/${model} /${model}
+COPY lib/sub_models /sub_models
+
+## test
+FROM download2-${added_stuff} as download
 
 #MODEL = $MODEL
 
@@ -75,19 +96,19 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 ## imports?
 #refiner
 FROM build_final_image_stage_1 as build_final_image_stage_2-refiner
-COPY lib/sub_models/. ${ROOT}/models/
-COPY lib/refiner/. ${ROOT}/models/
+COPY --from=download /sub_models/. ${ROOT}/models/
+COPY --from=download /refiner/. ${ROOT}/models/
 ENV UPSCALER="false"
 
 #upscaler
 FROM build_final_image_stage_1 as build_final_image_stage_2-upscaler
-COPY lib/sub_models/. ${ROOT}/models/
-COPY lib/upscalers/. ${ROOT}/models/
+COPY --from=download /sub_models/. ${ROOT}/models/
+COPY --from=download /upscalers/. ${ROOT}/models/
 ENV UPSCALER="true"
 
 #other
 FROM build_final_image_stage_1 as build_final_image_stage_2-other
-COPY lib/sub_models/. ${ROOT}/models/
+COPY --from=download /sub_models/. ${ROOT}/models/
 ENV UPSCALER="false"
 
 #test
@@ -109,9 +130,9 @@ FROM build_final_image_stage_3-${cnet} as build_final_image
 #    git reset --hard ${SHA}
 #&& \ pip install -r requirements_versions.txt
 
-COPY lib/models/${model} /${model}
-
 COPY --from=download /repositories/ ${ROOT}/repositories/
+
+COPY --from=download /${model} /${model}
 
 RUN mkdir ${ROOT}/interrogate && cp ${ROOT}/repositories/clip-interrogator/data/* ${ROOT}/interrogate
 RUN --mount=type=cache,target=/root/.cache/pip \
