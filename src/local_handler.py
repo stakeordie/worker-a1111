@@ -43,7 +43,7 @@ def run_inference(inference_request):
         print("Pulling Image")
         image = get_as_base64(inference_request["params"]["init_images"][0])
         image_string = image.decode('UTF-8')
-        inference_request["params"]["init_images"][0] = image
+        inference_request["params"]["init_images"][0] = image_string
         print("Sending to API")
         response = automatic_session.post(url=f'{LOCAL_URL}/img2img',
                                       json=inference_request["params"], timeout=600)
