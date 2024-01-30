@@ -90,42 +90,53 @@ RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip 
 
 
 
-RUN --mount=type=cache,target=/root/.cache/pip \
-    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
 
 ## imports?
 #refiner
 FROM build_final_image_stage_1 as build_final_image_stage_2-refiner
-COPY --from=download /sub_models/. ${ROOT}/models/
-COPY --from=download /refiner/. ${ROOT}/models/
+COPY --from=download /sub_models /sub_models
+COPY --from=download /refiner /refiner
+RUN --mount=type=cache,target=/root/.cache/pip \
+    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
+    cp -a /sub_models/. ${ROOT}/models/ && \
+    cp -a /refiner/. ${ROOT}/models/
 ENV UPSCALER="false"
 
 #upscaler
 FROM build_final_image_stage_1 as build_final_image_stage_2-upscaler
-COPY --from=download /sub_models/. ${ROOT}/models/
-COPY --from=download /upscalers/. ${ROOT}/models/
+COPY --from=download /sub_models /sub_models
+COPY --from=download /upscalers /upscalers
+RUN --mount=type=cache,target=/root/.cache/pip \
+    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
+    cp -a /sub_models/. ${ROOT}/models/ && \
+    cp -a /upscalers/. ${ROOT}/models/
 ENV UPSCALER="true"
 
 #other
 FROM build_final_image_stage_1 as build_final_image_stage_2-other
-COPY --from=download /sub_models/. ${ROOT}/models/
+COPY --from=download /sub_models /sub_models
+RUN --mount=type=cache,target=/root/.cache/pip \
+    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
+    cp -a /sub_models/. ${ROOT}/models/
 ENV UPSCALER="false"
 
+FROM build_final_image_stage_2-${added_stuff} as build_final_image
+
 #test
-FROM build_final_image_stage_2-${added_stuff} as build_final_image_stage_2
+##FROM build_final_image_stage_2-${added_stuff} as build_final_image_stage_2
 
 ## controlnet?
 
 ## true
-FROM build_final_image_stage_2 as build_final_image_stage_3-true
-COPY lib/extensions/. ${ROOT}/extensions/
-COPY lib/ControlNetModels/. ${ROOT}/extensions/sd-webui-controlnet/models/
+##FROM build_final_image_stage_2 as build_final_image_stage_3-true
+##COPY lib/extensions/. ${ROOT}/extensions/
+##COPY lib/ControlNetModels/. ${ROOT}/extensions/sd-webui-controlnet/models/
 
 ## flase
-FROM build_final_image_stage_2 as build_final_image_stage_3-false
+##FROM build_final_image_stage_2 as build_final_image_stage_3-false
 
 ## controlnet test
-FROM build_final_image_stage_3-${cnet} as build_final_image
+##FROM build_final_image_stage_3-${cnet} as build_final_image
 
 #    git reset --hard ${SHA}
 #&& \ pip install -r requirements_versions.txt
