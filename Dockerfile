@@ -6,7 +6,7 @@ ARG model
 ARG cnet="false"
 ARG upscaler="false"
 
-FROM alpine/git:2.36.2 as download1
+FROM alpine/git:2.36.2 as download
 
 COPY builder/clone.sh /clone.sh
 
@@ -25,29 +25,6 @@ RUN . /clone.sh BLIP https://github.com/salesforce/BLIP.git 48211a1594f1321b00f1
     . /clone.sh clip-interrogator https://github.com/pharmapsychotic/clip-interrogator 2486589f24165c8e3b303f84e9dbbea318df83e8 && \
     . /clone.sh generative-models https://github.com/Stability-AI/generative-models 45c443b316737a4ab6e40413d7794a7f5657c19f
 
-RUN apk add --no-cache wget
-
-ARG model
-COPY lib/models/${model} /${model}
-## imports?
-#sdxl
-FROM download1 as download2-sdxl
-COPY lib/sub_models /sub_models
-COPY lib/refiner /refiner
-
-#upscaler
-FROM download1 as download2-upscaler
-COPY lib/sub_models /sub_models
-COPY lib/upscalers /upscalers
-
-#other
-FROM download1 as download2-other
-COPY lib/sub_models /sub_models
-
-## test
-FROM download2-${added_stuff} as download
-
-#MODEL = $MODEL
 
 # ---------------------------------------------------------------------------- #
 #                        Stage 3: Build the final image                        #
@@ -90,8 +67,8 @@ RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip 
 
 #refiner
 FROM build_final_image_stage_1 as build_final_image_stage_2-refiner
-COPY --from=download /sub_models /sub_models
-COPY --from=download /refiner /refiner
+COPY lib/sub_models /sub_models
+COPY lib/refiner /refiner
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
     cp -a /sub_models/. ${ROOT}/models/ && \
@@ -100,8 +77,8 @@ ENV UPSCALER="false"
 
 #upscaler
 FROM build_final_image_stage_1 as build_final_image_stage_2-upscaler
-COPY --from=download /sub_models /sub_models
-COPY --from=download /upscalers /upscalers
+COPY lib/sub_models /sub_models
+COPY lib/upscalers /upscalers
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
     cp -a /sub_models/. ${ROOT}/models/ && \
@@ -110,7 +87,7 @@ ENV UPSCALER="true"
 
 #other
 FROM build_final_image_stage_1 as build_final_image_stage_2-other
-COPY --from=download /sub_models /sub_models
+COPY lib/sub_models /sub_models
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
     cp -a /sub_models/. ${ROOT}/models/
@@ -139,7 +116,7 @@ FROM build_final_image_stage_2-${added_stuff} as build_final_image
 
 COPY --from=download /repositories/ ${ROOT}/repositories/
 
-COPY --from=download /${model} /${model}
+COPY lib/models/${model} /${model}
 
 RUN mkdir ${ROOT}/interrogate && cp ${ROOT}/repositories/clip-interrogator/data/* ${ROOT}/interrogate
 RUN --mount=type=cache,target=/root/.cache/pip \

@@ -30,6 +30,9 @@ def wait_for_service(url):
 
         time.sleep(0.2)
 
+def get_as_base64(url):
+
+    return base64.b64encode(requests.get(url).content)
 
 def run_inference(inference_request):
     '''
