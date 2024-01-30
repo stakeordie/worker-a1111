@@ -1,9 +1,9 @@
 from webui import initialize
 import modules.interrogate
-import modules.sd_models
+from modules.sd_models import load_model
 
 initialize.initialize()
 interrogator = modules.interrogate.InterrogateModels("interrogate")
 interrogator.load()
 interrogator.categories()
-sd_models.load('/2_1.ckpt')
+load_model('/2_1.ckpt')
