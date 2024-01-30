@@ -61,8 +61,6 @@ ARG half="--no-half-vae"
 ARG lora="--lora-dir /runpod-volume/loras"
 ARG local="false"
 ARG local_port=8080
-RUN echo "HALF = $half"
-RUN echo "LORA = $lora"
 ENV DEBIAN_FRONTEND=noninteractive \
     PIP_PREFER_BINARY=1 \
     LD_PRELOAD=libtcmalloc.so \
@@ -89,9 +87,8 @@ RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip 
     pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
 
-
-
 ## imports?
+
 #refiner
 FROM build_final_image_stage_1 as build_final_image_stage_2-refiner
 COPY --from=download /sub_models /sub_models
