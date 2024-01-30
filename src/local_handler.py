@@ -47,6 +47,7 @@ def run_inference(inference_request):
         # print("Sending to API")
         # response = automatic_session.post(url=f'{LOCAL_URL}/img2img',
         #                               json=inference_request["params"], timeout=600)
+        return {"image": image}
     elif(inference_request["type"] == "extra-single-image"):
         response = automatic_session.post(url=f'{LOCAL_URL}/extra-single-image',
                                       json=inference_request["params"], timeout=600)
