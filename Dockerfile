@@ -50,7 +50,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-RUN export COMMANDLINE_ARGS="--skip-torch-cuda-test --precision full --no-half"
+##RUN export COMMANDLINE_ARGS="--skip-torch-cuda-test --precision full --no-half"
 RUN export TORCH_COMMAND='pip install --pre torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.6'
 
 RUN apt-get update && \
@@ -132,9 +132,9 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 ADD src .
 
 COPY builder/cache.py /stable-diffusion-webui/cache.py
-RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /${model} --no-half-vae
+RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /${model} --no-half-vae --skip-torch-cuda-test --precision full --no-half
 
-RUN cd /stable-diffusion-webui && python webui.py --skip-python-version-check --skip-torch-cuda-test --skip-install --ckpt /${model} ${lora} --opt-sdp-no-mem-attention --disable-safe-unpickle --port 3000 --api --nowebui --listen --lowram --skip-version-check --no-download-sd-model ${half}
+##RUN cd /stable-diffusion-webui && python webui.py --skip-python-version-check --skip-torch-cuda-test --skip-install --ckpt /${model} ${lora} --opt-sdp-no-mem-attention --disable-safe-unpickle --port 3000 --api --nowebui --listen --lowram --skip-version-check --no-download-sd-model ${half}
 # Cleanup section (Worker Template)
 RUN apt-get update -y && \
     apt-get install nano curl -y && \
