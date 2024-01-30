@@ -33,7 +33,7 @@ FROM python:3.10.6-slim as build_final_image_stage_1
 
 #ARG SHA=5ef669de080814067961f28357256e8fe27544f4
 ARG model
-ARG half="--no-half-vae"
+ARG half="--no-half-vae --precision full --no-half"
 ARG lora="--lora-dir /runpod-volume/loras"
 ARG local="false"
 ARG local_port=8080
@@ -132,7 +132,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 ADD src .
 
 COPY builder/cache.py /stable-diffusion-webui/cache.py
-RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /${model} --no-half-vae --skip-torch-cuda-test --precision full --no-half
+RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --skip-torch-cuda-test --ckpt /${model} ${half}
 
 ##RUN cd /stable-diffusion-webui && python webui.py --skip-python-version-check --skip-torch-cuda-test --skip-install --ckpt /${model} ${lora} --opt-sdp-no-mem-attention --disable-safe-unpickle --port 3000 --api --nowebui --listen --lowram --skip-version-check --no-download-sd-model ${half}
 # Cleanup section (Worker Template)
