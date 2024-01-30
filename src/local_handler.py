@@ -39,7 +39,7 @@ def run_inference(inference_request):
     Run inference on a request.
     '''
 
-    if hasattr(inference_request, 'params'):
+    if 'params' in inference_request:
         params = 'params'
     else:
         params = 'prompt'
