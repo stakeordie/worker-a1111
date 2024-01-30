@@ -30,18 +30,21 @@ RUN apk add --no-cache wget
 ## imports?
 #sdxl
 FROM download1 as download2-sdxl
+ARG model
 COPY lib/models/${model} /${model}
 COPY lib/sub_models /sub_models
 COPY lib/refiner /refiner
 
 #upscaler
 FROM download1 as download2-upscaler
+ARG model
 COPY models/${model} /${model}
 COPY lib/sub_models /sub_models
 COPY lib/upscalers /upscalers
 
 #other
 FROM download1 as download2-other
+ARG model
 COPY lib/models/${model} /${model}
 COPY lib/sub_models /sub_models
 
