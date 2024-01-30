@@ -1,5 +1,5 @@
 import time
-
+import base64
 import runpod
 import requests
 from requests.adapters import HTTPAdapter, Retry
