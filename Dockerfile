@@ -135,7 +135,7 @@ COPY builder/requirements.txt /requirements.txt
 #     rm /requirements.txt
 
 RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
-    pip3 install --no-cache-dir pytorch_lightning
+    pip3 install --no-cache-dir pytorch_lightning gradio
 ADD src .
 
 COPY builder/cache.py /stable-diffusion-webui/cache.py
