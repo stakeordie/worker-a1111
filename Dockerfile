@@ -50,17 +50,22 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+RUN apt-get update && \
+    apt -y upgrade
+
 ##RUN export COMMANDLINE_ARGS="--skip-torch-cuda-test --precision full --no-half"
-RUN export TORCH_COMMAND='pip install --pre torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.6'
+##RUN export TORCH_COMMAND='pip install --pre torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.6'
+
+
 
 RUN apt-get update && \
     apt install -y \
     fonts-dejavu-core rsync git jq moreutils aria2 wget libgoogle-perftools-dev procps libgl1 libglib2.0-0 && \
     apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && apt-get clean -y
 
-
-RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \
-    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
+    pip3 install --no-cache-dir torch==2.0.1+cu118 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 && \
+    pip3 install --no-cache-dir xformers==0.0.22
 
 
 ## imports?
