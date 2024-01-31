@@ -19,7 +19,7 @@ open-clip-torch
 
 piexif
 psutil
-pytorch_lightning
+pytorch_lightning==1.6.5
 realesrgan
 requests
 resize-right
