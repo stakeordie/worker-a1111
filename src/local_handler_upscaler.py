@@ -10,7 +10,7 @@ LOCAL_URL = "http://0.0.0.0:3000/sdapi/v1"
 automatic_session = requests.Session()
 retries = Retry(total=10, backoff_factor=0.1, status_forcelist=[502, 503, 504])
 automatic_session.mount('http://', HTTPAdapter(max_retries=retries))
-
+ 
 
 # ---------------------------------------------------------------------------- #
 #                              Automatic Functions                             #
