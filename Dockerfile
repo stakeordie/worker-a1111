@@ -130,7 +130,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     rm /requirements.txt
 
 RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install xformers==0.0.21
+    pip install xformers==0.0.24
 
 ADD src .
 
