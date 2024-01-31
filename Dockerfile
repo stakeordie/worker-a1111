@@ -129,13 +129,10 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 # Install Python dependencies (Worker Template)
 COPY builder/requirements.txt /requirements.txt
-RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install --upgrade pip && \
-    pip install --upgrade -r /requirements.txt --no-cache-dir && \
-    rm /requirements.txt
-
-RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install xformers==0.0.24.dev738
+# RUN --mount=type=cache,target=/root/.cache/pip \
+#     pip install --upgrade pip && \
+#     pip install --upgrade -r /requirements.txt --no-cache-dir && \
+#     rm /requirements.txt
 
 ADD src .
 
