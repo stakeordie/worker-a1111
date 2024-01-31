@@ -2,6 +2,7 @@ GitPython
 Pillow
 accelerate
 pydantic<2
+pyngrok
 
 basicsr
 blendmodes
@@ -17,6 +18,7 @@ lark
 numpy
 omegaconf
 open-clip-torch
+opencv-python-headless
 
 piexif
 psutil
@@ -33,7 +35,10 @@ torchdiffeq
 torchsde
 transformers==4.30.2
 
+httpcore
 httpx==0.24.1
 
-git+https://github.com/openai/CLIP.git
 git+https://github.com/runpod/runpod-python.git
+git+https://github.com/TencentARC/GFPGAN.git@8d2447a2d918f8eba5a4a01463fd48e45126a379
+git+https://github.com/openai/CLIP.git@d50d76daa670286dd6cacf3bcd80b5e4823fc8e1
+git+https://github.com/mlfoundations/open_clip.git@v2.20.0
