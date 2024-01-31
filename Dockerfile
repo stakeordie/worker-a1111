@@ -64,8 +64,8 @@ RUN apt-get update && \
     apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && apt-get clean -y
 
 RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
-    pip3 install --no-cache-dir torch==2.0.1+cu118 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 && \
-    pip3 install --no-cache-dir xformers==0.0.22
+    pip3 install --no-cache-dir torch==2.1.0+cu118 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 && \
+    pip3 install --no-cache-dir xformers
 
 
 ## imports?
@@ -134,19 +134,10 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --upgrade -r /new-requirements.txt --no-cache-dir && \
     rm /new-requirements.txt
 
-# RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
-#     pip3 install --no-cache-dir pytorch_lightning==1.6.5 gradio omegaconf safetensors kornia
-
-# RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
-#     pip3 install --no-cache-dir open-clip-torch einops transformers GitPython psutil lark tomesd httpx==0.24.1 jsonmerge clean-fid
-
-# RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
-#     pip3 install git+https://github.com/openai/CLIP.git resize-right torchdiffeq torchsde piexif blendmodes
-
 ADD src .
 
 COPY builder/cache.py /stable-diffusion-webui/cache.py
-RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --skip-torch-cuda-test --ckpt /${model} --xformers --no-half-vae
+RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --skip-torch-cuda-test --ckpt /${model} --xformers --no-half --no-half-vae
 
 ##RUN cd /stable-diffusion-webui && python webui.py --skip-python-version-check --skip-torch-cuda-test --skip-install --ckpt /${model} ${lora} --opt-sdp-no-mem-attention --disable-safe-unpickle --port 3000 --api --nowebui --listen --lowram --skip-version-check --no-download-sd-model ${half}
 # Cleanup section (Worker Template)
