@@ -128,20 +128,20 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     pip install -r ${ROOT}/repositories/CodeFormer/requirements.txt
 
 # Install Python dependencies (Worker Template)
-COPY builder/requirements.txt /requirements.txt
-# RUN --mount=type=cache,target=/root/.cache/pip \
-#     pip install --upgrade pip && \
-#     pip install --upgrade -r /requirements.txt --no-cache-dir && \
-#     rm /requirements.txt
+COPY builder/new-requirements.txt /new-requirements.txt
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --upgrade pip && \
+    pip install --upgrade -r /new-requirements.txt --no-cache-dir && \
+    rm /new-requirements.txt
 
-RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
-    pip3 install --no-cache-dir pytorch_lightning==1.6.5 gradio omegaconf safetensors kornia
+# RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
+#     pip3 install --no-cache-dir pytorch_lightning==1.6.5 gradio omegaconf safetensors kornia
 
-RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
-    pip3 install --no-cache-dir open-clip-torch einops transformers GitPython psutil lark tomesd httpx==0.24.1 jsonmerge clean-fid
+# RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
+#     pip3 install --no-cache-dir open-clip-torch einops transformers GitPython psutil lark tomesd httpx==0.24.1 jsonmerge clean-fid
 
-RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
-    pip3 install git+https://github.com/openai/CLIP.git resize-right torchdiffeq torchsde piexif blendmodes
+# RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
+#     pip3 install git+https://github.com/openai/CLIP.git resize-right torchdiffeq torchsde piexif blendmodes
 
 ADD src .
 
