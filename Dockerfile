@@ -65,7 +65,8 @@ RUN apt-get update && \
 
 RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
     pip3 install --no-cache-dir torch==2.0.1+cu118 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 && \
-    pip3 install --no-cache-dir xformers==0.0.22
+    pip3 install --no-cache-dir xformers==0.0.22 && \
+    pip3 install pytorch_lightning 
 
 
 ## imports?
