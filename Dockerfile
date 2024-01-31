@@ -140,6 +140,9 @@ RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip 
 RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
     pip3 install --no-cache-dir open-clip-torch einops transformers GitPython psutil lark tomesd httpx==0.24.1 jsonmerge clean-fid
 
+RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
+    pip3 install git+https://github.com/openai/CLIP.git
+
 ADD src .
 
 COPY builder/cache.py /stable-diffusion-webui/cache.py
