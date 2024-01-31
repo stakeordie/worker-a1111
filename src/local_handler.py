@@ -2,8 +2,11 @@ import time
 import base64
 import runpod
 import requests
+import os
 from requests.adapters import HTTPAdapter, Retry
 from datetime import date
+
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "max_split_size_mb:512"
 
 LOCAL_URL = "http://0.0.0.0:3000/sdapi/v1"
 
