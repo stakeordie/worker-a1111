@@ -135,7 +135,11 @@ COPY builder/requirements.txt /requirements.txt
 #     rm /requirements.txt
 
 RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
-    pip3 install --no-cache-dir pytorch_lightning gradio omegaconf safetensors kornia open_clip
+    pip3 install --no-cache-dir pytorch_lightning gradio omegaconf safetensors kornia
+
+RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
+    pip3 install --no-cache-dir open_clip
+
 ADD src .
 
 COPY builder/cache.py /stable-diffusion-webui/cache.py
