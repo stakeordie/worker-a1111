@@ -138,12 +138,12 @@ RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip 
     pip3 install --no-cache-dir pytorch_lightning==1.6.5 gradio omegaconf safetensors kornia
 
 RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
-    pip3 install --no-cache-dir open-clip-torch einops transformers GitPython psutil lark tomesd httpx==0.24.1
+    pip3 install --no-cache-dir open-clip-torch einops transformers GitPython psutil lark tomesd httpx==0.24.1 jsonmerge
 
 ADD src .
 
 COPY builder/cache.py /stable-diffusion-webui/cache.py
-RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --skip-torch-cuda-test --ckpt /${model} --xformers  jsonmerge
+RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --skip-torch-cuda-test --ckpt /${model} --xformers
 
 ##RUN cd /stable-diffusion-webui && python webui.py --skip-python-version-check --skip-torch-cuda-test --skip-install --ckpt /${model} ${lora} --opt-sdp-no-mem-attention --disable-safe-unpickle --port 3000 --api --nowebui --listen --lowram --skip-version-check --no-download-sd-model ${half}
 # Cleanup section (Worker Template)
