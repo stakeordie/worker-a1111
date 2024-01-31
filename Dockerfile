@@ -138,7 +138,7 @@ RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip 
     pip3 install --no-cache-dir pytorch_lightning gradio omegaconf safetensors kornia
 
 RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
-    pip3 install --no-cache-dir open_clip
+    pip3 install --no-cache-dir open-clip-torch
 
 ADD src .
 
