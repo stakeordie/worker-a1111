@@ -138,7 +138,7 @@ RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip 
     pip3 install --no-cache-dir pytorch_lightning==1.6.5 gradio omegaconf safetensors kornia
 
 RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
-    pip3 install --no-cache-dir open-clip-torch einops transformers GitPython psutil
+    pip3 install --no-cache-dir open-clip-torch einops transformers GitPython psutil lark
 
 ADD src .
 
