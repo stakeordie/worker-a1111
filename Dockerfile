@@ -65,8 +65,7 @@ RUN apt-get update && \
 
 RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
     pip3 install --no-cache-dir torch==2.0.1+cu118 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 && \
-    pip3 install --no-cache-dir xformers==0.0.22 && \
-    pip3 install pytorch_lightning 
+    pip3 install --no-cache-dir xformers==0.0.22
 
 
 ## imports?
@@ -135,6 +134,8 @@ COPY builder/requirements.txt /requirements.txt
 #     pip install --upgrade -r /requirements.txt --no-cache-dir && \
 #     rm /requirements.txt
 
+RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \ 
+    pip3 install --no-cache-dir pytorch_lightning
 ADD src .
 
 COPY builder/cache.py /stable-diffusion-webui/cache.py
