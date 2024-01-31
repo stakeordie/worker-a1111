@@ -11,7 +11,7 @@ echo "UPSCALER: $UPSCALER"
 
 echo "Starting WebUI API"
 
-python /stable-diffusion-webui/webui.py --skip-python-version-check --skip-torch-cuda-test --skip-install --ckpt /${MODEL} $LORA --opt-sdp-no-mem-attention --disable-safe-unpickle --port 3000 --api --nowebui --lowram --skip-version-check --no-download-sd-model ${HALF} &
+python /stable-diffusion-webui/webui.py --skip-python-version-check --skip-torch-cuda-test --skip-install --ckpt /${MODEL} $LORA --opt-sdp-no-mem-attention --disable-safe-unpickle --port 3000 --api --nowebui --listen --lowram --skip-version-check --no-download-sd-model ${HALF} &
 
 echo "Starting RunPod Handler"
 
